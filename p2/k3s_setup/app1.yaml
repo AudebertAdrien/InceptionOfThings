@@ -46,5 +46,5 @@ spec:
     app: app1
   ports:
     - protocol: TCP
-      port: 8081
+      port: 80
       targetPort: 3000

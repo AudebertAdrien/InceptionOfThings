@@ -46,5 +46,5 @@ spec:
     app: app3
   ports:
     - protocol: TCP
-      port: 8083
+      port: 80
       targetPort: 3000

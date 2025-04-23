@@ -13,7 +13,7 @@ spec:
           service:
             name: app1 
             port:
-              number: 8081
+              number: 80
   - host: "app2.com"
     http:
       paths:
@@ -23,7 +23,7 @@ spec:
           service:
             name: app2 
             port:
-              number: 8082
+              number: 80
   - http:
       paths:
       - pathType: Prefix
@@ -32,4 +32,4 @@ spec:
           service:
             name: app3 
             port:
-              number: 8082
+              number: 80
