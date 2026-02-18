@@ -13,7 +13,7 @@ while [ ! -f /var/lib/rancher/k3s/server/node-token ]; do
   sleep 1
 done
 
-sudo cat /var/lib/rancher/k3s/server/node-token >/vagrant/k3s_token.txt
+sudo cat /var/lib/rancher/k3s/server/node-token >/share/k3s_token.txt
 
 mkdir -p /home/vagrant/.kube
 sudo cp /etc/rancher/k3s/k3s.yaml /home/vagrant/.kube/config
@@ -25,3 +25,10 @@ if ! grep -q "KUBECONFIG" /home/vagrant/.bashrc; then
 fi
 
 sudo kubectl get nodes
+
+sleep 5
+
+sudo kubectl apply -f /share/confs/app1.yaml
+sudo kubectl apply -f /share/confs/app2.yaml
+sudo kubectl apply -f /share/confs/app3.yaml
+sudo kubectl apply -f /share/confs/ingress.yaml
