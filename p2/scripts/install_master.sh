@@ -23,13 +23,7 @@ if ! grep -q "KUBECONFIG" /home/vagrant/.bashrc; then
   echo 'export KUBECONFIG=/home/vagrant/.kube/config' >>/home/vagrant/.bashrc
 fi
 
-until sudo kubectl get nodes >/dev/null 2>&1; do
-  echo "Waiting for API Server..."
-  sleep 2
-done
-
-echo "Waiting for system pods to be ready..."
-sudo kubectl wait --for=condition=Ready node/aaudebers --timeout=90s
+sleep 5
 
 sudo kubectl apply -f /share/confs/app1.yaml
 sudo kubectl apply -f /share/confs/app2.yaml
