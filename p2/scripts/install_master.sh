@@ -21,14 +21,19 @@ sudo chown -R vagrant:vagrant /home/vagrant/.kube
 
 if ! grep -q "KUBECONFIG" /home/vagrant/.bashrc; then
   echo 'export KUBECONFIG=/home/vagrant/.kube/config' >>/home/vagrant/.bashrc
-  echo "KUBECONFIG exported to .bashrc"
 fi
 
-sudo kubectl get nodes
+until sudo kubectl get nodes >/dev/null 2>&1; do
+  echo "Waiting for API Server..."
+  sleep 2
+done
 
-sleep 5
+echo "Waiting for system pods to be ready..."
+sudo kubectl wait --for=condition=Ready node/aaudebers --timeout=90s
 
 sudo kubectl apply -f /share/confs/app1.yaml
 sudo kubectl apply -f /share/confs/app2.yaml
 sudo kubectl apply -f /share/confs/app3.yaml
 sudo kubectl apply -f /share/confs/ingress.yaml
+
+echo "Deployment finished!"
