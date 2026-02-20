@@ -1,0 +1,12 @@
+global:
+  hosts:
+    domaine: k3d.localhost
+    https: false
+  ingress:
+    configureCertmanager: false
+nginx-ingress:
+  install: false
+prometheus:
+  install: false
+gitlab-runner:
+  install: true
