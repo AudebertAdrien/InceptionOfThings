@@ -1,8 +1,0 @@
-write-kubeconfig-mode: "0644"
-
-cluster-init: true
-
-tls-san:
-  - "192.168.56.110"
-
-
