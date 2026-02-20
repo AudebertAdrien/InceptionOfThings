@@ -1,9 +1,10 @@
 #!/bin/bash
-sudo k3d cluster create cluster1
+sudo k3d cluster1 create --config ./confs/config_k3d.yaml
 sudo kubectl create namespace argocd
 sudo kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 sleep 40
 sudo kubectl get all -n argocd
+sudo kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "NodePort", "ports": [{"port": 80, "nodePort": 30001}]}}'
 # for linux
 sudo kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
 # for powershell

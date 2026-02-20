@@ -1,0 +1,13 @@
+apiVersion: k3d.io/v1alpha5
+kind: Simple
+metadata:
+  name: cluster1
+image: rancher/k3s:v1.24.8-k3s1
+ports:
+  - port: 7000:30001 # for argocd-server
+    nodeFilters:
+      - server:0
+  - port: 8888:30002 # for app
+    nodeFilters:
+      - server:0
+
