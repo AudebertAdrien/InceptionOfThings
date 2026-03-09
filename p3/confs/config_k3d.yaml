@@ -4,10 +4,6 @@ metadata:
   name: cluster1
 image: rancher/k3s:v1.24.8-k3s1
 ports:
-  - port: 7000:30001 # for argocd-server
+  - port: 8000:80
     nodeFilters:
-      - server:0
-  - port: 8888:30002 # for app
-    nodeFilters:
-      - server:0
-
+      - loadbalancer
