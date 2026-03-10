@@ -1,18 +1,12 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: app-test
-  namespace: argocd
-spec:
-  project: default
-  source:
-    repoURL: https://github.com/Loricko9/IoT_app.git
-    targetRevision: HEAD
-    path: .
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: dev
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
+configs:
+  params:
+    server.insecure: true
+
+server:
+  ingress:
+    enabled: true
+    ingressClassName: traefik
+    annotations:  
+      traefik.ingress.kubernetes.io/router.entrypoints: web
+    hosts:
+      - argocd.local

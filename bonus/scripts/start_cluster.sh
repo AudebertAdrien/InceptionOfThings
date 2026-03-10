@@ -1,26 +1,27 @@
 #!/bin/bash
-# Create cluster
 if k3d cluster list cluster1 &> /dev/null; then
 	echo "Cluster already exists"
 else
 	sudo k3d cluster create cluster1 --config ./confs/config_k3d.yaml
 fi
 if sudo kubectl create namespace gitlab; then
+	echo "Namespace gitlab created"
 	sudo helm repo add gitlab https://charts.gitlab.io/
 	sudo helm repo update
 	sudo helm install gitlab gitlab/gitlab -n gitlab -f ./confs/config_gitlab.yaml --set global.edition=ce
 fi
 if sudo kubectl create namespace argocd; then
 	echo "Namespace argocd created"
-	# Setup argocd
-	sudo kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+	sudo helm repo add argo https://argoproj.github.io/argo-helm
+	sudo helm repo update
+	sudo helm install argocd argo/argo-cd -n argocd -f ./confs/config_argocd.yaml
 	sleep 40
 	sudo kubectl get all -n argocd
-	sudo kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "NodePort", "ports": [{"port": 80, "nodePort": 30001}]}}'
 fi
 # Deploy app with config files
 sudo kubectl create namespace dev
-sudo kubectl -n argocd apply -f ./confs/config_argocd.yaml
+sudo kubectl apply -f ./confs/config_ingress.yaml
+sudo kubectl -n argocd apply -f ./confs/config_app.yaml
 # Get password for argocd admin user :
 # For linux
 sudo kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
