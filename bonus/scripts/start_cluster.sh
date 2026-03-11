@@ -23,5 +23,3 @@ fi
 # Deploy app with config files
 sudo kubectl create namespace dev
 sudo kubectl apply -f ./confs/config_ingress.yaml
-sleep 40
-sudo kubectl -n argocd apply -f ./confs/config_app.yaml
