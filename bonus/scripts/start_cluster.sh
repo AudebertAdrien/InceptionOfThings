@@ -9,6 +9,8 @@ if sudo kubectl create namespace gitlab; then
 	sudo helm repo add gitlab https://charts.gitlab.io/
 	sudo helm repo update
 	sudo helm install gitlab gitlab/gitlab -n gitlab -f ./confs/config_gitlab.yaml --set global.edition=ce
+	sleep 500
+	sudo kubectl get all -n gitlab
 fi
 if sudo kubectl create namespace argocd; then
 	echo "Namespace argocd created"
@@ -21,9 +23,5 @@ fi
 # Deploy app with config files
 sudo kubectl create namespace dev
 sudo kubectl apply -f ./confs/config_ingress.yaml
+sleep 40
 sudo kubectl -n argocd apply -f ./confs/config_app.yaml
-# Get password for argocd admin user :
-# For linux
-sudo kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
-# For powershell
-# kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | ForEach-Object { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) };

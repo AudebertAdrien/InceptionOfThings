@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: http://gitlab.local/root/iot.git
+    repoURL: http://gitlab.local:8181/root/iot.git
     targetRevision: main
     path: .
   destination:
