@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/AudebertAdrien/iot-aaudeber
+    repoURL: https://github.com/AudebertAdrien/InceptionOfThings
     targetRevision: HEAD
     path: p3/confs/
   destination:
