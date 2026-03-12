@@ -43,8 +43,8 @@ if ! grep -q "KUBECONFIG" /home/vagrant/.bashrc; then
   echo 'export KUBECONFIG=/home/vagrant/.kube/config' >>/home/vagrant/.bashrc
 fi
 
-kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -
-kubectl create namespace dev --dry-run=client -o yaml | kubectl apply -f -
+kubectl create namespace argocd
+kubectl create namespace dev
 
 # Install Argo CD
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml --server-side
