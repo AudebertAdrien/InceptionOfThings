@@ -47,7 +47,7 @@ kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -
 kubectl create namespace dev --dry-run=client -o yaml | kubectl apply -f -
 
 # Install Argo CD
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml --server-side
 
 echo "Waiting for Argo CD pods to be ready..."
 kubectl wait --for=condition=Ready pods --all -n argocd --timeout=300s
