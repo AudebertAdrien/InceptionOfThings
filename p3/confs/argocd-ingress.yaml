@@ -18,6 +18,7 @@ metadata:
     traefik.ingress.kubernetes.io/router.entrypoints: web
     traefik.ingress.kubernetes.io/router.tls: "false"
 spec:
+  ingressClassName: traefik
   rules:
   - host: "app2.com"
     http:
