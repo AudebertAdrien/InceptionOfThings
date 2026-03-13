@@ -52,7 +52,7 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/st
 echo "Waiting for Argo CD pods to be ready..."
 kubectl wait --for=condition=Ready pods --all -n argocd --timeout=300s
 
-kubectl apply -n argocd -f /share/confs/application.yaml
-kubectl apply -n dev -f /share/confs/app-ingress.yaml
-kubectl apply -n argocd -f /share/confs/argocd-ingress.yaml
+kubectl apply -f /share/confs/application.yaml
+kubectl apply -f /share/confs/app-ingress.yaml
+kubectl apply -f /share/confs/argocd-ingress.yaml
 kubectl rollout restart deployment argocd-server -n argocd
