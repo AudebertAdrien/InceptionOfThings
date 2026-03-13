@@ -58,5 +58,8 @@ kubectl wait --for=condition=Ready pods --all -n argocd --timeout=300s
 
 kubectl apply -f /share/confs/platform/argocd-params-cm.yaml
 kubectl apply -f /share/confs/platform/argocd-ing.yaml
+
 kubectl rollout restart deployment argocd-server -n argocd
+kubectl rollout status deployment argocd-server -n argocd --timeout=60s
+
 kubectl apply -f /share/confs/platform/argocd-app.yaml
