@@ -5,6 +5,7 @@ metadata:
   namespace: dev
 spec:
   ingressClassName: traefik
+  replicas: 1
   rules:
   - host: "app1.com"
     http:
