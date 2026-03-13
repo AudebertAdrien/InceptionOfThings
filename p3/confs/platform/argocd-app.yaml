@@ -1,14 +1,18 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: playground-app
+  name: argocd-app
   namespace: argocd
+  labels: 
+    app.kubernetes.io/name: argocd-app
+    app.kubernetes.io/instance: iot-project
+    app.kubernetes.io/component: deployment
 spec:
   project: default
   source:
     repoURL: https://github.com/AudebertAdrien/InceptionOfThings
     targetRevision: HEAD
-    path: p3/confs/
+    path: p3/confs/apps
   destination:
     server: https://kubernetes.default.svc
     namespace: dev

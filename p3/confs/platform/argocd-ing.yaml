@@ -1,14 +1,3 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: argocd-cmd-params-cm
-  namespace: argocd
-  labels:
-    app.kubernetes.io/name: argocd-cmd-params-cm
-    app.kubernetes.io/part-of: argocd
-data:
-  server.insecure: "true"
----
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -17,10 +6,14 @@ metadata:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web
     traefik.ingress.kubernetes.io/router.tls: "false"
+  labels:
+    app.kubernetes.io/name: argocd-server
+    app.kubernetes.io/instance: iot-project
+    app.kubernetes.io/component: ingress
 spec:
   ingressClassName: traefik
   rules:
-  - host: "app2.com"
+  - host: argocd.iot.local
     http:
       paths:
       - pathType: Prefix
