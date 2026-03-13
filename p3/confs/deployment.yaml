@@ -4,6 +4,7 @@ metadata:
   name: wil-playground
   namespace: dev
 spec:
+  ingressClassName: traefik
   replicas: 1
   selector:
     matchLabels:
@@ -22,7 +23,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: wil-playground-service
+  name: wil-playground
   namespace: dev
 spec:
   selector:
