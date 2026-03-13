@@ -4,7 +4,7 @@ metadata:
   name: wil-playground-ingress
   namespace: dev
   labels:
-    app.kubernetes.io/name: wil-playground-app
+    app.kubernetes.io/name: wil-playground
     app.kubernetes.io/instance: iot-project
     app.kubernetes.io/component: ingress
 spec:
