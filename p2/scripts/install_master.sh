@@ -25,9 +25,9 @@ fi
 
 sleep 5
 
-sudo kubectl apply -f /share/confs/app1.yaml
-sudo kubectl apply -f /share/confs/app2.yaml
-sudo kubectl apply -f /share/confs/app3.yaml
-sudo kubectl apply -f /share/confs/ingress.yaml
+kubectl apply -f /share/confs/app1.yaml
+kubectl apply -f /share/confs/app2.yaml
+kubectl apply -f /share/confs/app3.yaml
+kubectl apply -f /share/confs/ingress.yaml
 
 echo "Deployment finished!"

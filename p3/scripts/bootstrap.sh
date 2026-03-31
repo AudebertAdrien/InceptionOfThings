@@ -63,3 +63,6 @@ kubectl rollout restart deployment argocd-server -n argocd
 kubectl rollout status deployment argocd-server -n argocd --timeout=60s
 
 kubectl apply -f /share/confs/platform/argocd-app.yaml
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+echo
+
