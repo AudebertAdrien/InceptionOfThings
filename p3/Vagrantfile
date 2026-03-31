@@ -1,17 +1,17 @@
-LOGIN = "aaudeberS"
+VM_CONTROL_NAME = "aaudeberS"
 
 Vagrant.configure(2) do |config|
   config.vm.box = "generic/debian12"
   config.vm.synced_folder ".", "/share"
 
-  config.vm.define LOGIN do |control|
-    control.vm.hostname = LOGIN
+  config.vm.define VM_CONTROL_NAME do |control|
+    control.vm.hostname = VM_CONTROL_NAME
 
     control.vm.network :private_network, ip: "192.168.56.110"
     control.vm.network "forwarded_port", guest: 8080, host: 8080
 
     control.vm.provider :virtualbox do |vb|
-      vb.name = LOGIN
+      vb.name = VM_CONTROL_NAME
       vb.memory = 4096
       vb.cpus = 2
       vb.gui = false
