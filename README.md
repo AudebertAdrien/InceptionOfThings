@@ -38,9 +38,9 @@ vagrant up
 ````
 2. In your host file you have to add this entries :
 ````sh
-app1.com 192.168.56.110
-app2.com 192.168.56.110
-app3.com 192.168.56.110
+192.168.56.110 app1.com
+192.168.56.110 app2.com
+192.168.56.110 app3.com
 ````
 3. When all app are ready in the VM you can test the ingress with every host
 ````sh
@@ -59,8 +59,8 @@ bash ./scripts/start_cluster.sh
 At the end of the script you can see the admin password for the argocd interface
 3. In your `host` file you need to add this entries
 ````sh
-argocd.local 127.0.0.1
-dev.local 127.0.0.1
+127.0.0.1 argocd.local
+127.0.0.1 dev.local
 ````
 4. You can test to connect to argocd interface (only on http) on the 8000 port or on the dev app
 ````sh
@@ -79,9 +79,9 @@ bash ./scripts/start_cluster.sh
 Because Gitlab need a lot of ressources, it make a long time to start, so be patient.
 2. In your `host` file you need to add this entries
 ````sh
-gitlab.local 127.0.0.1
-argocd.local 127.0.0.1
-dev.local 127.0.0.1
+127.0.0.1 gitlab.local
+127.0.0.1 argocd.local
+127.0.0.1 dev.local
 ````
 3. You can access to all interface on with this `host` on the 8000 port
 ````sh
