@@ -65,8 +65,50 @@ kubectl apply -f /share/confs/gitlab/gitlab-svc.yaml
 kubectl apply -f /share/confs/gitlab/gitlab-ing.yaml
 
 echo "Waiting for GitLab to be ready..."
-sleep 10
-kubectl wait --for=condition=Ready pods --all -n gitlab --timeout=800s
+
+kubectl rollout restart deployment/gitlab -n gitlab
+kubectl rollout status deployment/gitlab -n gitlab --timeout=800s
+
+echo "=================================================="
+echo "         GitLab Automation (Project & Push)       "
+echo "=================================================="
+
+sudo apt-get install -y git
+
+if ! grep -q "gitlab.iot.local" /etc/hosts; then
+  echo "127.0.0.1 gitlab.iot.local" | sudo tee -a /etc/hosts
+fi
+
+echo "Waiting for GitLab web interface to fully boot (can take a few minutes)..."
+while ! curl -s -o /dev/null -w "%{http_code}" http://gitlab.iot.local:8080 | grep -qE "200|302"; do
+  sleep 10
+done
+
+GITLAB_POD=$(kubectl get pods -n gitlab -l app.kubernetes.io/name=gitlab -o jsonpath='{.items[0].metadata.name}')
+
+echo "Creating public project and Access Token via Rails Runner..."
+kubectl exec -n gitlab $GITLAB_POD -- gitlab-rails runner "
+user = User.find_by_username('root');
+Project.create(name: 'iot-project', path: 'iot-project', namespace_id: user.namespace.id, visibility_level: 20, creator: user) unless Project.find_by_path('iot-project');
+token = user.personal_access_tokens.build(scopes: ['api', 'write_repository'], name: 'AutoToken', expires_at: 365.days.from_now);
+token.set_token('glpat-VagrantToken1234');
+token.save!
+"
+
+echo "Pushing configuration to local GitLab..."
+cd /share/
+
+git config --global user.email "vagrant@iot.local"
+git config --global user.name "Vagrant Administrator"
+
+git init
+git checkout -b main 2>/dev/null || true
+git add .
+git commit -m "Automated initial push for GitOps" || true
+
+git remote remove origin 2>/dev/null || true
+git remote add origin http://root:glpat-VagrantToken1234@gitlab.iot.local:8080/root/iot-project.git
+git push -u origin main
 
 echo "=================================================="
 echo "               Argo CD Deployment                 "
