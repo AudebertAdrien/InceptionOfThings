@@ -1,4 +1,3 @@
-test
 # IoT
 
 ## The goal
