@@ -11,7 +11,8 @@ if sudo kubectl create namespace argocd; then
 	sudo kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 	sudo kubectl apply -f ./confs/config_cluster.yaml
 	sudo kubectl rollout restart deployment argocd-server -n argocd
-	sleep 40
+	sleep 10
+	sudo kubectl wait --for=condition=Ready pods --all -n argocd --timeout=300s
 	sudo kubectl get all -n argocd
 fi
 # Deploy app with config files

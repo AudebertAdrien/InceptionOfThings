@@ -10,10 +10,16 @@ nginx-ingress:
 prometheus:
   install: false
 gitlab-runner:
-  install: true
+  install: false
+minio:
+  ingress:
+    enabled: false
 
 gitlab:
   webservice:
+    resources:
+      requests:
+        memory: 512Mi
     minReplicas: 1
     maxReplicas: 1
   sidekiq:
