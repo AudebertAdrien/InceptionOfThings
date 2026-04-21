@@ -1,4 +1,8 @@
 #!/bin/bash
+set -e
+
+K3D_CLUSTER_NAME="iot-cluster"
+USER_HOME="/home/vagrant"
 
 # Install Docker
 sudo apt update
@@ -30,14 +34,14 @@ fi
 # Install K3d
 curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
 
-if ! k3d cluster list | grep -q "dev-cluster"; then
-  k3d cluster create dev-cluster --port 8888:8888@loadbalancer --wait
+if ! k3d cluster list | grep -q "$K3D_CLUSTER_NAME"; then
+  k3d cluster create "$K3D_CLUSTER_NAME" --port "8080:80@loadbalancer" --wait
 fi
 
-mkdir -p /home/vagrant/.kube
-k3d kubeconfig get dev-cluster >/home/vagrant/.kube/config
-chown vagrant:vagrant /home/vagrant/.kube/config
-chmod 600 /home/vagrant/.kube/config
+mkdir -p "$USER_HOME/.kube"
+k3d kubeconfig get "$K3D_CLUSTER_NAME" >"$USER_HOME/.kube/config"
+chown -R vagrant:vagrant "$USER_HOME/.kube"
+chmod 600 "$USER_HOME/.kube/config"
 
 if ! grep -q "KUBECONFIG" /home/vagrant/.bashrc; then
   echo 'export KUBECONFIG=/home/vagrant/.kube/config' >>/home/vagrant/.bashrc
@@ -47,7 +51,18 @@ kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -
 kubectl create namespace dev --dry-run=client -o yaml | kubectl apply -f -
 
 # Install Argo CD
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml --server-side
 
 echo "Waiting for Argo CD pods to be ready..."
 kubectl wait --for=condition=Ready pods --all -n argocd --timeout=300s
+
+kubectl apply -f /share/confs/platform/argocd-params-cm.yaml
+kubectl apply -f /share/confs/platform/argocd-ing.yaml
+
+kubectl rollout restart deployment argocd-server -n argocd
+kubectl rollout status deployment argocd-server -n argocd --timeout=60s
+
+kubectl apply -f /share/confs/platform/argocd-app.yaml
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+echo
+

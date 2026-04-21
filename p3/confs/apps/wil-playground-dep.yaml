@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wil-playground
+  namespace: dev
+  labels:
+    app.kubernetes.io/name: wil-playground
+    app.kubernetes.io/instance: iot-project
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/component: deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wil-playground
+  template:
+    metadata:
+      labels:
+        app: wil-playground
+    spec:
+      containers:
+      - name: wil-playground
+        image: wil42/playground:v1
+        ports:
+        - containerPort: 8888
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "500m"

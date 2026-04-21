@@ -1,0 +1,45 @@
+global:
+  edition: ce
+  antiAffinity: "soft"
+  kas:
+    enabled: false
+  hosts:
+    domain: iot.local
+    https: false
+  ingress:
+    configureCertmanager: false
+    class: traefik
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: web
+      traefik.ingress.kubernetes.io/router.tls: "false"
+
+nginx-ingress:
+  enabled: false
+prometheus:
+  install: false
+gitlab-runner:
+  install: false
+registry:
+  enabled: false
+minio:
+  ingress:
+    enabled: false
+
+gitlab:
+  webservice:
+    minReplicas: 1
+    maxReplicas: 1
+    workerProcesses: 1
+    resources:
+      requests:
+        cpu: 100m
+        memory: 1G
+      limits:
+        memory: 2.5G
+  sidekiq:
+    minReplicas: 1
+    maxReplicas: 1
+    resources:
+      requests:
+        cpu: 50m
+        memory: 500M
