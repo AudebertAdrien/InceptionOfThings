@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 K3D_CLUSTER_NAME="iot-cluster"
 USER_HOME="/home/vagrant"
@@ -77,8 +76,13 @@ helm upgrade --install gitlab gitlab/gitlab \
 
 echo "Waiting for GitLab Webservice and Toolbox to be ready (This will take a long time)..."
 
-kubectl rollout status deployment/gitlab-webservice-default -n gitlab --timeout=900s
-kubectl rollout status deployment/gitlab-toolbox -n gitlab --timeout=900s
+while ! kubectl get deployment gitlab-webservice-default -n gitlab -o jsonpath='{.status.conditions[?(@.type=="Available")].status}' | grep -q "True"; do
+  sleep 20
+done
+
+while ! kubectl get deployment gitlab-toolbox -n gitlab -o jsonpath='{.status.conditions[?(@.type=="Available")].status}' | grep -q "True"; do
+  sleep 20
+done
 
 echo "=================================================="
 echo "         GitLab Automation (Project & Push)       "
@@ -87,6 +91,7 @@ echo "=================================================="
 if ! grep -q "gitlab.iot.local" /etc/hosts; then
   echo "127.0.0.1 gitlab.iot.local" | sudo tee -a /etc/hosts
 fi
+
 
 echo "Waiting for GitLab web interface HTTP 200..."
 while ! curl -s -o /dev/null -w "%{http_code}" http://gitlab.iot.local:8080 | grep -qE "200|302"; do
@@ -98,10 +103,17 @@ GITLAB_TOOLBOX_POD=$(kubectl get pods -n gitlab -l app=toolbox -o jsonpath='{.it
 echo "Creating public project and Access Token via Rails Runner..."
 kubectl exec -n gitlab $GITLAB_TOOLBOX_POD -- gitlab-rails runner "
 user = User.find_by_username('root');
+
 Project.create(name: 'iot-project', path: 'iot-project', namespace_id: user.namespace.id, visibility_level: 20, creator: user) unless Project.find_by_path('iot-project');
-token = user.personal_access_tokens.build(scopes: ['api', 'write_repository'], name: 'AutoToken', expires_at: 365.days.from_now);
-token.set_token('glpat-VagrantToken1234');
-token.save!
+
+unless user.personal_access_tokens.find_by_name('AutoToken')
+  token = user.personal_access_tokens.build(scopes: ['api', 'write_repository'], name: 'AutoToken', expires_at: 365.days.from_now);
+  token.set_token('glpat-VagrantToken1234');
+  token.save!;
+  puts 'Token created successfully.';
+else
+  puts 'Token already exists. Skipping creation.';
+end
 "
 
 echo "Pushing configuration to local GitLab..."

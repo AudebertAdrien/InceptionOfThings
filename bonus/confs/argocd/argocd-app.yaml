@@ -10,7 +10,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: http://gitlab-webservice-default.gitlab.svc.cluster.local:8181/root/iot-project.git
+    repoURL: http://root:glpat-VagrantToken1234@gitlab-webservice-default.gitlab.svc.cluster.local:8181/root/iot-project.git
     targetRevision: HEAD
     path: apps
   destination:

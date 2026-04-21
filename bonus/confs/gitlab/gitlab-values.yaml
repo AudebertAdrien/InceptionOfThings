@@ -1,5 +1,8 @@
 global:
   edition: ce
+  antiAffinity: "soft"
+  kas:
+    enabled: false
   hosts:
     domain: iot.local
     https: false
@@ -21,3 +24,22 @@ registry:
 minio:
   ingress:
     enabled: false
+
+gitlab:
+  webservice:
+    minReplicas: 1
+    maxReplicas: 1
+    workerProcesses: 1
+    resources:
+      requests:
+        cpu: 100m
+        memory: 1G
+      limits:
+        memory: 2.5G
+  sidekiq:
+    minReplicas: 1
+    maxReplicas: 1
+    resources:
+      requests:
+        cpu: 50m
+        memory: 500M
