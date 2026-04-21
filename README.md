@@ -19,11 +19,11 @@ For the third part & bonuses, you have to install docker & k3d on your computer 
 vagrant up
 ````
 2. Connect in ssh to the server VM
-sh````
+````sh
 vagrant ssh aaudeberS
 ````
 3. Verify if Agent cluster work fine
-sh````
+````sh
 sudo kubectl get nodes
 ````
 
@@ -41,6 +41,8 @@ vagrant up
 3. When all app are ready in the VM you can test the ingress with every host
 ````sh
 http://app1.com/
+http://app2.com/
+http://192.168.56.110/
 ````
 
 #### Part 3 Guide : 
@@ -48,19 +50,16 @@ http://app1.com/
 ````sh
 vagrant up
 ````
-2. Execute the script for configure the cluster
-````sh
-bash ./scripts/start_cluster.sh
-````
 At the end of the script you can see the admin password for the argocd interface
-3. In your `host` file you need to add this entries
+2. In your `host` file you need to add this entries
 ````sh
 127.0.0.1 argocd.local
 127.0.0.1 dev.local
 ````
-4. You can test to connect to argocd interface (only on http) on the 8000 port or on the dev app
+3. You can test to connect to argocd interface (only on http) on the 8000 port or on the dev app
 ````sh
 http://argocd.local:8000/
+http://dev.local:8000/
 ````
 
 ## Bonuses
@@ -82,6 +81,7 @@ Because Gitlab need a lot of ressources, it make a long time to start, so be pat
 ````sh
 http://gitlab.local:8000/
 http://argocd.local:8000/
+http://dev.local:8000/
 ````
 **The admin password for gitlab & argocd can be obtain at the end of the install script or by executing `scripts/get_password.sh`**
 For the Argocd Web Interface, the admin username is `admin`.
