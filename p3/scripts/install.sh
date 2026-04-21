@@ -53,17 +53,16 @@ echo "=================================================="
 echo "               Argo CD Deployment                 "
 echo "=================================================="
 
-if kubectl create namespace argocd; then
-	echo "Namespace argocd created"
-	kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml --server-side
-	kubectl wait --for=condition=ready pods --all -n argocd --timeout=300s
-	kubectl apply -f /share/confs/config_cluster.yaml
-	kubectl rollout restart deployment argocd-server -n argocd
-	kubectl rollout status deployment/argocd-server -n argocd --timeout=60s
-	kubectl get all -n argocd
-fi
-kubectl create namespace dev
+kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -
+kubectl create namespace dev --dry-run=client -o yaml | kubectl apply -f -
+
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml --server-side
+kubectl wait --for=condition=ready pods --all -n argocd --timeout=300s
 kubectl apply -f /share/confs/config_cluster.yaml
+kubectl rollout restart deployment argocd-server -n argocd
+kubectl rollout status deployment/argocd-server -n argocd --timeout=60s
+kubectl get all -n argocd
+
 kubectl -n argocd apply -f /share/confs/config_argocd.yaml
 
 echo "=================================================="
@@ -71,4 +70,6 @@ echo "             Installation Complete                "
 echo "=================================================="
 
 echo -n "Argo CD 'admin' Password: "
-kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+echo
+
