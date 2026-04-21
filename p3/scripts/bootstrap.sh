@@ -39,7 +39,7 @@ fi
 curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
 
 if ! k3d cluster list | grep -q "$K3D_CLUSTER_NAME"; then
-  k3d cluster create "$K3D_CLUSTER_NAME" --port "8080:80@loadbalancer" --wait
+  k3d cluster create "$K3D_CLUSTER_NAME" --port "8000:80@loadbalancer" --wait
 fi
 
 mkdir -p "$USER_HOME/.kube"
