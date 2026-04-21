@@ -3,13 +3,11 @@
 K3D_CLUSTER_NAME="iot-cluster"
 USER_HOME="/home/vagrant"
 
-sudo apt update && sudo apt install -y curl wget
 echo "=================================================="
 echo "         System Setup & Docker Install            "
 echo "=================================================="
 
-sudo apt update
-sudo apt install -y ca-certificates curl git
+sudo apt update && sudo apt install -y curl ca-certificates git
 sudo install -m 0755 -d /etc/apt/keyrings
 sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
 sudo chmod a+r /etc/apt/keyrings/docker.asc
@@ -43,12 +41,12 @@ k3d kubeconfig get "$K3D_CLUSTER_NAME" >"$USER_HOME/.kube/config"
 chown -R vagrant:vagrant "$USER_HOME/.kube"
 chmod 600 "$USER_HOME/.kube/config"
 
-if ! k3d cluster list | grep -q "$K3D_CLUSTER_NAME"; then
-  k3d cluster create $K3D_CLUSTER_NAME --config /share/confs/config_k3d.yaml
-fi
-
 if ! grep -q "KUBECONFIG" /home/vagrant/.bashrc; then
   echo 'export KUBECONFIG=/home/vagrant/.kube/config' >>/home/vagrant/.bashrc
+fi
+
+if ! k3d cluster list | grep -q "$K3D_CLUSTER_NAME"; then
+  k3d cluster create $K3D_CLUSTER_NAME --config /share/confs/config_k3d.yaml
 fi
 
 echo "=================================================="
@@ -57,11 +55,11 @@ echo "=================================================="
 
 if kubectl create namespace argocd; then
 	echo "Namespace argocd created"
-	# Setup argocd
 	kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml --server-side
+	kubectl wait --for=condition=ready pods --all -n argocd --timeout=300s
 	kubectl apply -f /share/confs/config_cluster.yaml
 	kubectl rollout restart deployment argocd-server -n argocd
-	kubectl wait --for=condition=Ready pods --all -n argocd --timeout=300s
+	kubectl rollout status deployment/argocd-server -n argocd --timeout=60s
 	kubectl get all -n argocd
 fi
 kubectl create namespace dev

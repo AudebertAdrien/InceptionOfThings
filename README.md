@@ -14,19 +14,15 @@ For the third part & bonuses, you have to install docker & k3d on your computer 
 ## Execution
 
 #### Part 1 Guide :
-1. Have to create the `confs/` directory for vagrant 
-````sh
-mkdir confs
-````
-2. Just execute the vagrant file in the `p1/` directory
+1. Just execute the vagrant file in the `p1/` directory
 ````sh
 vagrant up
 ````
-3. Connect in ssh to the server VM
+2. Connect in ssh to the server VM
 sh````
-vagrant ssh lle-saulS
+vagrant ssh aaudeberS
 ````
-4. Verify if Agent cluster work fine
+3. Verify if Agent cluster work fine
 sh````
 sudo kubectl get nodes
 ````
@@ -48,9 +44,9 @@ http://app1.com/
 ````
 
 #### Part 3 Guide : 
-1. If you d'ont a have all the dependency such as docker or kubernet, execute the `install.sh`
+1. You can execute the vagrant file in the `p3/` directory
 ````sh
-bash ./scripts/install.sh
+vagrant up
 ````
 2. Execute the script for configure the cluster
 ````sh
@@ -69,12 +65,11 @@ http://argocd.local:8000/
 
 ## Bonuses
 
-For this bonus, you need to get one more dependency on your computer : HELM, you can execute `scripts/install.sh` to install it.
-**With Gitlab, this k3d cluster is very heavy in ressources, make sure docker are at least 6Go of RAM**
+**With Gitlab, this k3d cluster is very heavy in ressources, make sure the VM has at least 6Go of RAM**
 
-1. You can execute the usual script to start the k3d cluster
+1. You can execute the vagrant file in the `bonus/` directory
 ````sh
-bash ./scripts/start_cluster.sh
+vagrant up
 ````
 Because Gitlab need a lot of ressources, it make a long time to start, so be patient.
 2. In your `host` file you need to add this entries
@@ -88,8 +83,8 @@ Because Gitlab need a lot of ressources, it make a long time to start, so be pat
 http://gitlab.local:8000/
 http://argocd.local:8000/
 ````
-**The admin password for gitlab & argocd can be obtain by executing `scripts/start_cluster.sh`**
-4. On Gitlab interface, you can create a repository, if you name it `iot`, you can automatly deploy it in argocd with this command :
-````sh`
-sudo kubectl -n argocd -f apply ./confs/config.app.yaml
-````
+**The admin password for gitlab & argocd can be obtain at the end of the install script or by executing `scripts/get_password.sh`**
+For the Argocd Web Interface, the admin username is `admin`.
+For the Gitlab Web Interface, the admin username is `root`.
+
+The repository is automaticly created with the installed script.
