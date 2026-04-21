@@ -10,7 +10,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-  - host: playground.iot.local
+  - host: dev.local
     http:
       paths:
       - pathType: Prefix

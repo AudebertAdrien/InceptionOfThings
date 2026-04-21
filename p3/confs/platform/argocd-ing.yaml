@@ -13,7 +13,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-  - host: argocd.iot.local
+  - host: argocd.local
     http:
       paths:
       - pathType: Prefix
