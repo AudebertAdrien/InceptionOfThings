@@ -1,0 +1,9 @@
+apiVersion: k3d.io/v1alpha5
+kind: Simple
+metadata:
+  name: cluster1
+image: rancher/k3s:v1.24.8-k3s1
+ports:
+  - port: 8000:80
+    nodeFilters:
+      - loadbalancer
