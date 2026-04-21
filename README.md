@@ -19,11 +19,11 @@ For the third part & bonuses, you have to install docker & k3d on your computer 
 vagrant up
 ````
 2. Connect in ssh to the server VM
-sh````
+````sh
 vagrant ssh aaudeberS
 ````
 3. Verify if Agent cluster work fine
-sh````
+````sh
 sudo kubectl get nodes
 ````
 
