@@ -3,13 +3,11 @@
 K3D_CLUSTER_NAME="iot-cluster"
 USER_HOME="/home/vagrant"
 
-sudo apt update && sudo apt install -y curl wget
 echo "=================================================="
 echo "         System Setup & Docker Install            "
 echo "=================================================="
 
-sudo apt update
-sudo apt install -y ca-certificates curl git
+sudo apt update && sudo apt install -y curl ca-certificates git
 sudo install -m 0755 -d /etc/apt/keyrings
 sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
 sudo chmod a+r /etc/apt/keyrings/docker.asc
@@ -36,11 +34,11 @@ if [ ! -f /usr/local/bin/kubectl ]; then
   sudo mv ./kubectl /usr/local/bin/kubectl
 fi
 
-sudo apt-get install curl gpg apt-transport-https --yes
+sudo apt install gpg apt-transport-https --yes
 curl -fsSL https://packages.buildkite.com/helm-linux/helm-debian/gpgkey | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
 echo "deb [signed-by=/usr/share/keyrings/helm.gpg] https://packages.buildkite.com/helm-linux/helm-debian/any/ any main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
-sudo apt-get update
-sudo apt-get install helm
+sudo apt update
+sudo apt install helm
 
 curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
 
