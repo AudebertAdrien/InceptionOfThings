@@ -35,7 +35,7 @@ if [ ! -f /usr/local/bin/kubectl ]; then
 fi
 
 sudo apt install gpg apt-transport-https --yes
-curl -fsSL https://packages.buildkite.com/helm-linux/helm-debian/gpgkey | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+curl -fsSL https://packages.buildkite.com/helm-linux/helm-debian/gpgkey | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg >/dev/null
 echo "deb [signed-by=/usr/share/keyrings/helm.gpg] https://packages.buildkite.com/helm-linux/helm-debian/any/ any main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
 sudo apt update
 sudo apt install helm
@@ -55,15 +55,14 @@ echo "=================================================="
 echo "               GitLab Deployment (Helm)           "
 echo "=================================================="
 
-if kubectl create namespace gitlab; then
-	echo "Namespace gitlab created"
-	helm repo add gitlab https://charts.gitlab.io/
-	helm repo update
-	helm install gitlab gitlab/gitlab -n gitlab -f /share/confs/config_gitlab.yaml --set global.edition=ce
-	kubectl rollout status deployment/gitlab-webservice-default -n gitlab --timeout=900s
-	kubectl rollout status deployment/gitlab-toolbox -n gitlab --timeout=900s
-	kubectl get all -n gitlab
-fi
+kubectl create namespace gitlab --dry-run=client -o yaml | kubectl apply -f -
+
+helm repo add gitlab https://charts.gitlab.io/
+helm repo update
+helm install gitlab gitlab/gitlab -n gitlab -f /share/confs/config_gitlab.yaml --set global.edition=ce
+kubectl rollout status deployment/gitlab-webservice-default -n gitlab --timeout=900s
+kubectl rollout status deployment/gitlab-toolbox -n gitlab --timeout=900s
+kubectl get all -n gitlab
 
 echo "=================================================="
 echo "         GitLab Automation (Project & Push)       "
@@ -108,15 +107,14 @@ echo "=================================================="
 echo "               Argo CD Deployment (Helm)          "
 echo "=================================================="
 
-if sudo kubectl create namespace argocd; then
-	echo "Namespace argocd created"
-	helm repo add argo https://argoproj.github.io/argo-helm
-	helm repo update
-    kubectl create namespace dev
-	helm install argocd argo/argo-cd -n argocd -f /share/confs/config_argocd.yaml
-	kubectl rollout status deployment/argocd-server -n argocd --timeout=300s
-	kubectl get all -n argocd
-fi
+kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -
+kubectl create namespace dev --dry-run=client -o yaml | kubectl apply -f -
+
+helm repo add argo https://argoproj.github.io/argo-helm
+helm repo update
+helm install argocd argo/argo-cd -n argocd -f /share/confs/config_argocd.yaml
+kubectl rollout status deployment/argocd-server -n argocd --timeout=300s
+kubectl get all -n argocd
 
 kubectl apply -f /share/confs/config_ingress.yaml
 kubectl -n argocd apply -f /share/confs/config_app.yaml
