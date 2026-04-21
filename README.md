@@ -48,6 +48,7 @@ http://192.168.56.110/
 vagrant up
 ````
 Note: At the end of the provisioning script, the `admin` password for the `Argo CD` interface will be displayed in your terminal.
+
 2. Add the following entries to your host machine's hosts file `(/etc/hosts)`:
 ````sh
 127.0.0.1 argocd.local
