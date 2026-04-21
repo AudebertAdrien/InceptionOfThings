@@ -69,6 +69,7 @@ http://dev.local:8000/
 vagrant up
 ````
 Note: Because GitLab requires significant resources and performs database migrations on its first run, it will take a long time to start. Please be patient.
+
 2. Add the following entries to your host machine's hosts file `(/etc/hosts)`:
 ````sh
 127.0.0.1 gitlab.local
