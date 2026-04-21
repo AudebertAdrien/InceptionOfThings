@@ -35,12 +35,3 @@ spec:
             name: app
             port:
               number: 8888
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: coredns-custom
-  namespace: kube-system
-data:
-  gitlab.override: |
-    rewrite name gitlab.local gitlab-webservice-default.gitlab.svc.cluster.local
