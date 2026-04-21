@@ -6,8 +6,7 @@ Understand and set up Kubernetes. First, use Vagrant to deploy it within a Virtu
 
 ## Requirement
 
-* **For Parts 1 & 2:** You need to install VirtualBox and Vagrant on your host machine to execute the Vagrantfiles.
-* **For Part 3 & Bonus:** You must have Docker and K3d installed on your computer to use the `kubectl` command. For the bonus, you will also need the Helm package manager. You can easily install these dependencies by executing the `install.sh` script located in the `scripts/` directory.
+You need to install VirtualBox and Vagrant on your host machine to execute the Vagrantfiles.
 
 ## Execution
 
@@ -62,7 +61,7 @@ http://dev.local:8000/
 
 ## Bonuses
 
-**WARNING: GitLab makes this K3d cluster extremely resource-intensive. Ensure your computer as at least 6GB of RAM free of RAM.**
+**WARNING: GitLab makes this K3d cluster extremely resource-intensive. Ensure your computer has at least 6GB of available RAM.**
 
 1. You can execute the vagrant file in the `bonus/` directory
 ````sh
@@ -83,7 +82,7 @@ http://dev.local:8000/
 ````
 **The admin passwords for GitLab and Argo CD are displayed at the end of the installation script.** You can also retrieve them at any time by executing: 
 ````sh
-scripts/get_password.sh
+./scripts/get_password.sh
 ````
 For the `Argo CD` Web Interface, the admin username is `admin`.
 For the `GitLab` Web Interface, the admin username is `root`.
