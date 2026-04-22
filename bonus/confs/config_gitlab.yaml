@@ -5,26 +5,33 @@ global:
   ingress:
     configureCertmanager: false
     class: traefik
+  kas:
+    enabled: false
+
 nginx-ingress:
   enabled: false
 prometheus:
   install: false
 gitlab-runner:
   install: false
+registry:
+  enabled: false
 minio:
   ingress:
     enabled: false
 
 gitlab:
   webservice:
-    resources:
-      requests:
-        memory: 512Mi
     minReplicas: 1
     maxReplicas: 1
+    workerProcesses: 2
   sidekiq:
     minReplicas: 1
     maxReplicas: 1
   gitlab-shell:
     minReplicas: 1
     maxReplicas: 1
+  gitlab-exporter:
+    enabled: false
+  kas:
+    enabled: false

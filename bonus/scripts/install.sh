@@ -47,6 +47,10 @@ k3d kubeconfig get "$K3D_CLUSTER_NAME" >"$USER_HOME/.kube/config"
 chown -R vagrant:vagrant "$USER_HOME/.kube"
 chmod 600 "$USER_HOME/.kube/config"
 
+if ! grep -q "KUBECONFIG" /home/vagrant/.bashrc; then
+  echo 'export KUBECONFIG=/home/vagrant/.kube/config' >>/home/vagrant/.bashrc
+fi
+
 if ! k3d cluster list | grep -q "$K3D_CLUSTER_NAME"; then
   k3d cluster create $K3D_CLUSTER_NAME --config /share/confs/config_k3d.yaml
 fi
